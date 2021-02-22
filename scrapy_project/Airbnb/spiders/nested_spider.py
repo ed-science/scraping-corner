@@ -16,11 +16,11 @@ class nestedSpider(scrapy.Spider):
 
         # Oepening hotels pages
         for hotel in hotel_links:
-            yield response.follow(url=link, callback=self.parse_hotel)
+            yield response.follow(url=hotel, callback=self.parse_hotel)
         
         # Get Next Page information
         next_page = response.css('next_page_selector').extract()
-            yield scrapy.Request(url=url, callback=self.parse)     
+        yield scrapy.Request(url=next_page, callback=self.parse)     
 
 
     def parse_hotel(self, response):
@@ -32,7 +32,7 @@ class nestedSpider(scrapy.Spider):
         
         yield {
             "info_1":info_1,
-            "info_2":info_3
+            "info_2":info_2
         }
 
 

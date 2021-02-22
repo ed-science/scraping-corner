@@ -1,7 +1,7 @@
 import scrapy
 from logzero import logger as lg
-class SpiderAirbnb(scrapy.Spider):
-    name = "BasicAirbnbSpider"
+class AirbnbSpider(scrapy.Spider):
+    name = "AirbnbSpider"
 
     def start_requests(self):
         cities = ['toronto']
@@ -13,11 +13,11 @@ class SpiderAirbnb(scrapy.Spider):
     def parse(self, response):
         lg.info(response.url)
 
-        # Gettting the hotels list
+        # Getting hotels list
         hotel_links = response.css('div._8ssblpx ::attr(href)')
 
         # Oepening hotels pages
-        for hotel in hotel_links:
+        for link in hotel_links:
             yield response.follow(url=link, callback=self.parse_hotel)
         
         # Get Next Page information
@@ -29,25 +29,26 @@ class SpiderAirbnb(scrapy.Spider):
                 lg.info(url)
                 yield scrapy.Request(url=url, callback=self.parse)     
 
-        def parse_hotel(self, response):
+    def parse_hotel(self, response):
 
-            # Get price informations
-            prices = get_info.get_prices(response)
-            price_1, price_2, price_3, price_4, price_5 = prices
-            logger.debug(prices)
+        # Get price informations
+        prices = get_info.get_prices(response)
+        price_1, price_2, price_3, price_4, price_5 = prices
+        lg.debug(prices)
 
-            # Get title information
-            title = get_info.get_title(response)
-            logger.debug(title)
+        # Get title information
+        title = get_info.get_title(response)
+        lg.debug(title)
 
-            # Get description information
-            description = get_info.get_description(response)
+        # Get description information
+        description = get_info.get_description(response)
 
-            yield {
-                ""
+        yield {
+            "title":title,
+            "description":description,
+            "url": response.url
+        }
 
-            }
 
 
-
-       
+    

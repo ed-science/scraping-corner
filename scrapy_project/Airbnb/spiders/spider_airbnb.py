@@ -13,11 +13,11 @@ logzero.loglevel(logging.DEBUG) # To display content information
 # logzero.loglevel(logging.INFO)  # To see number of parsed references
 #logzero.loglevel(logging.WARN)  # To see number of parsed main pages
 
-class SpiderAirbnb(scrapy.Spider):
+class AirbnbSpider(scrapy.Spider):
     name = "AirbnbSpider"
 
     def __init__(self, *args, **kwargs):
-        super(SpiderAirbnb, self).__init__(*args, **kwargs)
+        super(AirbnbSpider, self).__init__(*args, **kwargs)
 
         # Parse URL
         self.start_urls = [kwargs.get('start_url')]

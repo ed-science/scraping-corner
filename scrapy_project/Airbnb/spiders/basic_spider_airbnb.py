@@ -1,6 +1,7 @@
 import scrapy
 from logzero import logger as lg
-class SpiderAirbnb(scrapy.Spider):
+
+class BasicAirbnbSpider(scrapy.Spider):
     name = "BasicAirbnbSpider"
 
     def start_requests(self):
