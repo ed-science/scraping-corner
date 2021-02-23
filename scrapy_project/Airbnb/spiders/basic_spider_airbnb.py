@@ -42,6 +42,7 @@ class BasicAirbnbSpider(scrapy.Spider):
             # Is it a airbnb "superhost" ?
             superhost        = hotel.css('div._ufoy4t::text').extract()
             superhost        = 'SUPERHOST' in superhost
+            
             lg.debug(title)
             yield {
                 'titre'            : title,

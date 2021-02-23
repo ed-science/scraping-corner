@@ -1,4 +1,5 @@
 import scrapy
+import get_info
 from logzero import logger as lg
 class AirbnbSpider(scrapy.Spider):
     name = "AirbnbSpider"
