@@ -41,7 +41,7 @@ class OMSSpider(scrapy.Spider):
 
         # Number of main page scrapped
         self.page += 1
-        logger.warn('Parse page ({})'.format(self.page))
+        logger.warn(f'Parse page ({self.page})')
 
         # Get the url of each reference on the current page
         links = get_info.get_article_urls(response)
@@ -49,11 +49,11 @@ class OMSSpider(scrapy.Spider):
         # Follow these urls
         for link in links:
             yield response.follow(url=link, callback=self.parse_article)
-          
+
         # Get pagination information
         next_page = get_info.get_next_page_of_articles(response)        # LINK
         next_page_number = get_info.get_next_page_number(next_page)     # PAGE
-        
+
         # Decision to follow a page or not
         if get_info.go_to_next_page(next_page, next_page_number, self.max_page_articles):
             yield response.follow(next_page, callback=self.parse)
@@ -63,8 +63,8 @@ class OMSSpider(scrapy.Spider):
         
         # Number of reviews scrapped
         self.object += 1
-        logger.info('Parse object ({})'.format(self.object))
-                    
+        logger.info(f'Parse object ({self.object})')
+
         # Instantiate item
         item = OmsItem()
 
@@ -78,7 +78,7 @@ class OMSSpider(scrapy.Spider):
         item['field_2'] = get_info.get_field_2(response)
         item['field_3'] = get_info.get_field_3(response)
         ################################################################################################
-    
+
         # Store value as decided in the pipeline
         yield item
 

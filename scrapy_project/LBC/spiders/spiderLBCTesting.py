@@ -24,21 +24,21 @@ class spiderLBCTestingLong(scrapy.Spider):
         logger.error('-'* 50)
         logger.error('-'* 50)
         logger.error('--- STARTING MAIN UNIT TESTING (1/2) ---')
-        
+
         # Get items objects
         lbc_items = get_info.get_items(response)
-        logger.debug('Nb links : {}'.format(len(lbc_items)))
+        logger.debug(f'Nb links : {len(lbc_items)}')
         assert lbc_items is not None,                           'get_info.get_items'
         assert len(lbc_items)==35,                              'get_info.get_items'
 
         # Get links
         links = [get_info.get_url_main(lbc_item) for lbc_item in lbc_items]
         link = links[0]
-        logger.debug('Nb links : {}'.format(len(links)))
+        logger.debug(f'Nb links : {len(links)}')
         assert links is not None,                               'get_info.get_url_main'
         assert len(links)==len(lbc_items),                      'get_info.get_url_main'
 
-        
+
         # Following next page
         next_page, next_page_number = get_info.get_next_list_of_announces(response)
         assert type(next_page) == str,                          'get_info.get_next_list_of_announces'
@@ -60,8 +60,8 @@ class spiderLBCTestingLong(scrapy.Spider):
         id_ = get_info.get_id(response)
         logger.debug(id_)
         assert int(id_[0]) in range(1,9)
-        assert len(id_) in [10]
-        
+        assert len(id_) in {10}
+
         # Basic information
         titre = get_info.get_titre(response)
         logger.debug(titre)
@@ -103,7 +103,7 @@ class spiderLBCTestingLong(scrapy.Spider):
         logger.debug(is_envoi_msg)
         assert type(titre) == str
         assert type(titre) == str
-        
+
         criteres = get_info.get_criteres(response)
         logger.debug(criteres)
         assert type(titre) == str
@@ -111,7 +111,7 @@ class spiderLBCTestingLong(scrapy.Spider):
         criteres_dict = get_info.critere_cleaning(criteres)
         logger.debug(criteres_dict)
         assert type(titre) == str
-        
+
         logger.error('--- ANNOUNCE UNIT TESTING IS OK ---')
         time.sleep(3)
 

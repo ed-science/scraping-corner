@@ -20,8 +20,7 @@ def read_jl_file(file_name):
             values.append(line)
     values = values[:-1]
     values = [json.loads(i) for i in values]
-    df = pd.DataFrame(values)
-    return df
+    return pd.DataFrame(values)
 
 
 ###### Initiating app functions
@@ -44,8 +43,7 @@ class Distrib(Resource):
     def get(self):
         df_jl = read_jl_file(FILE_PATH)
         tmp = df_jl['rating'].value_counts()
-        rep = tmp.to_dict()
-        return rep
+        return tmp.to_dict()
 
 
 api.add_resource(Product, '/lines')

@@ -28,10 +28,11 @@ class BookSNCF():
     
     def scroll_to_element(self, elmt):
         y = elmt.location['y']
-        logger.debug('scrolling to y={}'.format(y))
+        logger.debug(f'scrolling to y={y}')
         y = y -150
-        self.driver.execute_script("window.scrollTo(0, {})".format(y))
-        logger.debug('Wait 1s') ; time.sleep(0.7)
+        self.driver.execute_script(f"window.scrollTo(0, {y})")
+        logger.debug('Wait 1s')
+        time.sleep(0.7)
 
     def get_url(self):
         logger.warning('Connect to desired application')
@@ -83,59 +84,66 @@ class BookSNCF():
 
     def check_login(self):
         test = self.driver.find_elements_by_class_name('first-name')
-        if len(test) > 0:
-            if self.prenom_sncf.lower() in test[0].text.lower():
-                logger.error('Welcome {}'.format(self.prenom_sncf))
-                return True
+        if len(test) > 0 and self.prenom_sncf.lower() in test[0].text.lower():
+            logger.error(f'Welcome {self.prenom_sncf}')
+            return True
         return False
 
     def make_search(self, origin='Paris', destination='Bordeaux', jour='08', mois='04', annee='2020'):
         logger.warning('Realize research according to selected parameters')
-        
-        
+
+
         # Select origin
-        logger.info('From {}'.format(origin))
+        logger.info(f'From {origin}')
         searchbox = self.driver.find_element_by_id('vsb-origin-train-launch')
         searchbox.clear()
-        logger.debug('Wait 1s') ; time.sleep(1.1)
+        logger.debug('Wait 1s')
+        time.sleep(1.1)
         searchbox.send_keys(origin)
-        logger.debug('Wait 3s') ; time.sleep(3.3) 
+        logger.debug('Wait 3s')
+        time.sleep(3.3)
         searchbox.send_keys(Keys.ENTER)
-        
+
         # Select destination
-        logger.info('To {}'.format(destination))
+        logger.info(f'To {destination}')
         searchbox2 = self.driver.find_element_by_id('vsb-destination-train-launch')
         searchbox2.clear()
-        logger.debug('Wait 1s') ; time.sleep(1.2)
+        logger.debug('Wait 1s')
+        time.sleep(1.2)
         searchbox2.send_keys(destination)
-        logger.debug('Wait 3s') ; time.sleep(2.7)
+        logger.debug('Wait 3s')
+        time.sleep(2.7)
         searchbox2.send_keys(Keys.ENTER)
-        
+
         # Select date
-        id_ = 'train-launch-d-{}-{}-{}'.format(jour, mois, annee)
-        logger.info('Date {}'.format(id_))
+        id_ = f'train-launch-d-{jour}-{mois}-{annee}'
+        logger.info(f'Date {id_}')
         logger.info('- Open date selector')
         date = self.driver.find_element_by_id('vsb-dates-dialog-train-launch-aller-retour-1')
         date.click()
-        logger.debug('Wait 4s') ; time.sleep(4.23)
+        logger.debug('Wait 4s')
+        time.sleep(4.23)
         # previous_month = self.driver.find_element_by_id('previousMonth')
         # next_month = self.driver.find_element_by_id('nextMonth')
         logger.info('- Select choosen date')
         date_selected = self.driver.find_element_by_id(id_)
         date_selected.click()
-        logger.debug('Wait 2s') ; time.sleep(1.95)
+        logger.debug('Wait 2s')
+        time.sleep(1.95)
         # Eventuall select hour
         logger.info('- Validate date')
         button =  self.driver.find_element_by_id('vsb-datepicker-train-launch-aller-retour-submit')
         button.click()
-        logger.debug('Wait 4s') ; time.sleep(4.1)
+        logger.debug('Wait 4s')
+        time.sleep(4.1)
 
 
         # Validate research
         logger.info('Validate research')
         btn = self.driver.find_element_by_id('vsb-booking-train-launch-submit')
         btn.click()
-        logger.debug('Wait 15s') ; time.sleep(15)
+        logger.debug('Wait 15s')
+        time.sleep(15)
     
     def trajets_suivants(self):
         logger.warning('> Affichage des trajets suivants')
@@ -152,7 +160,7 @@ class BookSNCF():
 
 
     def select_train(self, horaire_souhaite='15:52'):
-        logger.warning('Select train : {}'.format(horaire_souhaite))
+        logger.warning(f'Select train : {horaire_souhaite}')
 
         tgvmax_signature = ['meilleur', 'prix', '0', '€', '0,00', '€']
 
@@ -174,10 +182,10 @@ class BookSNCF():
         logger.info(' - Found TGVMax : ', len(list_of_tgvmax))
 
         # Keep train tgvmax
-        travel_2_keep = []
-        for train in list_of_trains:
-            if train.location['y'] in y_buttons:
-                travel_2_keep.append(train)
+        travel_2_keep = [
+            train for train in list_of_trains if train.location['y'] in y_buttons
+        ]
+
         logger.info('>>> TGVMAX POWER:')
         _ = [logger.debug((i.location, i.text.split())) for i in travel_2_keep]
 
@@ -187,7 +195,7 @@ class BookSNCF():
                 wanted_button = travel
         logger.info('Train found')
         ##########################
-        
+
         # If horaire is ok
         logger.info('Click on selected train')
         self.scroll_to_element(wanted_button)
@@ -214,10 +222,10 @@ class BookSNCF():
         logger.info(' - Found TGVMax : ', len(list_of_tgvmax))
 
         # Keep train tgvmax
-        travel_2_keep = []
-        for train in list_of_trains:
-            if train.location['y'] in y_buttons:
-                travel_2_keep.append(train)
+        travel_2_keep = [
+            train for train in list_of_trains if train.location['y'] in y_buttons
+        ]
+
         logger.info('>>> TGVMAX POWER:')
         _ = [logger.debug((i.location, i.text.split())) for i in travel_2_keep]
 
@@ -231,7 +239,8 @@ class BookSNCF():
 
 
         wanted_button.click()
-        logger.debug('Wait 7s') ; time.sleep(6.7)
+        logger.debug('Wait 7s')
+        time.sleep(6.7)
 
     def select_aller(self):
         logger.warning('Selection step')
@@ -331,19 +340,16 @@ class BookSNCF():
 
 if __name__ == "__main__":
     # from book_sncf import BookSNCF
-    
+
     # Collect identifiers
     rep = get_identifiants('credentials.json')
     user, password, prenom = rep
-    
+
     # Instanciate object and lof to website
     bs = BookSNCF(user, password, prenom)
     bs.get_url()
     bs.login()
-    is_logged = bs.check_login()
-
-    # Make reservation
-    if is_logged:
+    if is_logged := bs.check_login():
         logger.info('Correctly logged')
         bs.make_search(origin='Bordeaux', destination='Paris', jour='25', mois='03', annee='2020')
         bs.trajets_suivants()
@@ -355,6 +361,6 @@ if __name__ == "__main__":
         bs.consult_command()
     else:
         logger.error('NOT LOGED IN')
-    
+
     # Close instance
     bs.close_driver()

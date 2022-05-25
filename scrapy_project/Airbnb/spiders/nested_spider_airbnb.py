@@ -20,15 +20,14 @@ class AirbnbSpider(scrapy.Spider):
         # Oepening hotels pages
         for link in hotel_links:
             yield response.follow(url=link, callback=self.parse_hotel)
-        
+
         # Get Next Page information
         next_page = response.css('a._za9j7e ::attr(href)').extract()
-        if next_page is not None:
-            if len(next_page)>0:
-                next_page = next_page[0]
-                url = "https://www.airbnb.com" + next_page + '&display_currency=USD'
-                lg.info(url)
-                yield scrapy.Request(url=url, callback=self.parse)     
+        if next_page is not None and len(next_page) > 0:
+            next_page = next_page[0]
+            url = f"https://www.airbnb.com{next_page}&display_currency=USD"
+            lg.info(url)
+            yield scrapy.Request(url=url, callback=self.parse)     
 
     def parse_hotel(self, response):
 

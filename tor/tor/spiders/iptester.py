@@ -11,8 +11,7 @@ class IPTesterSpider(scrapy.Spider):
 
     def parse(self, response):
         soup = BeautifulSoup(response.body, 'html.parser')
-        ip_address = soup.get_text().rstrip('\n')
-        if ip_address:
+        if ip_address := soup.get_text().rstrip('\n'):
             logging.info('IP ADDRESS = %s', ip_address)
         else:
             logging.info('IP ADDRESS NOT FOUND')

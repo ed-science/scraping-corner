@@ -83,8 +83,7 @@ class HttpProxyMiddleware(object):
         failed_proxy = request.meta['proxy']
         logging.log(logging.DEBUG, 'Removing failed proxy...')
         try:
-            i = 0
-            for proxy in self.proxies:
+            for i, proxy in enumerate(self.proxies):
                 if proxy['address'] in failed_proxy:
                     del self.proxies[i]
                     proxies_num = len(self.proxies)
@@ -93,18 +92,13 @@ class HttpProxyMiddleware(object):
                     if proxies_num == 0:
                         self.query_proxies()
                     return True
-                i += 1
         except KeyError:
             logging.log(logging.ERROR, 'Error while removing failed proxy')
         return False
 
     def process_exception(self, request, exception, spider):
-        if self.remove_failed_proxy(request, spider):
-            return request
-        return None
+        return request if self.remove_failed_proxy(request, spider) else None
 
     def process_response(self, request, response, spider):
         # really brutal filter
-        if response.status == 200:
-            return response
-        return request
+        return response if response.status == 200 else request

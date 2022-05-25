@@ -9,18 +9,21 @@ def go_to_next_page(next_page, next_page_number, max_page, printing=False):
         if printing: print(' - There is no next_page')
     else:
         if printing: print(' - There is a next_page')
-        if printing: print(' - Page url is : {}'.format(next_page))
+        if printing:
+            print(f' - Page url is : {next_page}')
         if max_page is None:
             if printing: print(' - There is no number of page restriction. Go on.')
             #yield response.follow(next_page, callback=self.parse_resto)
             return True
         else:
-            if printing: print(' - Max page number is : {}'.format(max_page))
+            if printing:
+                print(f' - Max page number is : {max_page}')
 
             if next_page_number is None:
                 if printing: print(' -  No next number page : STOP.')
             else:
-                if printing: print(' - Next page number is {}'.format(next_page_number))
+                if printing:
+                    print(f' - Next page number is {next_page_number}')
                 if int(next_page_number) <= int(max_page):
                     if printing: print(' - It is smaller than limit. Go on.')
                     #yield response.follow(next_page, callback=self.parse_resto)
@@ -78,8 +81,7 @@ def get_description(response):
 def get_items_description(response):
     texts = response.css('div#feature-bullets').xpath('ul/li/span/text()').extract()
     texts = [text.replace('\n', '').replace('\t', '') for text in texts]
-    items_description = ','.join(texts).replace('  ', '')
-    return items_description
+    return ','.join(texts).replace('  ', '')
 
 def get_category(response):
     category = response.xpath('//ul[contains(@class, "a-unordered-list a-horizontal a-size-small")]//li//text()').extract()

@@ -59,12 +59,12 @@ class SpiderCarrefour(scrapy.Spider):
         # Defining the number of pages to scrap
         nb_articles = 7856
         nb_article_par_page = 60
-        nb_page = int(nb_articles / nb_article_par_page)
+        nb_page = nb_articles // nb_article_par_page
         # nb_page = 2
 
         # Going to each pages
         for page in range(1, nb_page + 1):
-            url = 'https://www.carrefour.fr/r?page={}'.format(page)
+            url = f'https://www.carrefour.fr/r?page={page}'
             logger.warn(url)
 
             yield SplashRequest(url=url, callback=self.parse, args={'wait':5})
@@ -74,14 +74,14 @@ class SpiderCarrefour(scrapy.Spider):
 
         # Displaying parsing information
         self.page +=1
-        logger.error('> Pages loaded {} : {}'.format(self.page, response.url))
+        logger.error(f'> Pages loaded {self.page} : {response.url}')
 
         # Extracting product links on articles page
         urls = get_info.get_links(response)
 
         # Going to the articles pages
         for url in urls:
-            url = 'https://www.carrefour.fr' + url
+            url = f'https://www.carrefour.fr{url}'
             yield SplashRequest(url=url, callback=self.parse_article, args={'wait':10})
 
 
@@ -89,7 +89,7 @@ class SpiderCarrefour(scrapy.Spider):
 
         # Displaying parsing information
         self.object += 1
-        logger.warn('> Articles scrapped {}'.format(self.object))
+        logger.warn(f'> Articles scrapped {self.object}')
 
         # Creating item with scraped information
         item = ArticleItem()

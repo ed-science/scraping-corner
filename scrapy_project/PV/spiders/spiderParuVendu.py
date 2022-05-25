@@ -39,7 +39,7 @@ class SpiderPV(scrapy.Spider):
 
                 # Get identificators
                 url = get_info.get_url(pv_item)
-                url = '{}{}'.format(website, url)
+                url = f'{website}{url}'
                 id_ = url.split('/')[-1]
                 print('*' * 25, 'START ITEM : ', id_, '*' * 25)
 

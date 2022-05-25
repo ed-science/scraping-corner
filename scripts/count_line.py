@@ -18,4 +18,4 @@ if __name__ == "__main__":
     nb_lines = len(file.split('\n'))
 
     # Display results
-    print('Number of lines : {}'.format(nb_lines))
+    print(f'Number of lines : {nb_lines}')

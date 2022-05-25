@@ -19,7 +19,7 @@ class SpiderAmazonTestingMain(scrapy.Spider):
 
     def parse(self, response):
         logger.error('--- STARTING MAIN UNIT TESTING ---')
-        
+
         # Get the url of each reference on the current page
         links = get_info.get_reference_links(response)
         logger.info(len(links))
@@ -29,12 +29,12 @@ class SpiderAmazonTestingMain(scrapy.Spider):
 
         # Get pagination information
         next_page, page_number = get_info.get_main_pagination(response)
-        logger.info('Next page : {}'.format(next_page))
-        logger.info('Page number : {}'.format(page_number))
+        logger.info(f'Next page : {next_page}')
+        logger.info(f'Page number : {page_number}')
         assert type(next_page) == str,                                      'get_info.get_main_pagination -- next page'
         assert '/s?i=sporting-intl-ship&rh=n%3A16225014011&' in next_page,  'get_info.get_main_pagination -- next page'
         assert page_number == 2,                                            'get_info.get_main_pagination --  page number'
-        
+
         logger.error('--- MAIN UNIT TESTING IS OK ---')
         time.sleep(3)
       
@@ -61,8 +61,8 @@ class SpiderAmazonTestingReference(scrapy.Spider):
         logger.info('Prices')
         logger.info(prices_list)
         logger.info(full_none)
-        assert len(full_none) > 0,                                          'get_info.get_main_pagination -- next page'
-        
+        assert full_none, 'get_info.get_main_pagination -- next page'
+
         # Get title information
         title = get_info.get_title(response)
         logger.debug(title)
@@ -74,15 +74,15 @@ class SpiderAmazonTestingReference(scrapy.Spider):
         description = get_info.get_description(response)
         logger.debug('Description')
         assert type(description)==str,                                      'get_info.get_description'
-        
+
         # Get item description information
-        items_description = get_info.get_items_description(response)    
+        items_description = get_info.get_items_description(response)
         logger.debug('Description')
         assert type(items_description)==str,                                'get_info.get_items_description'
-        
+
         # Get category information
         category = get_info.get_category(response)
-        logger.debug('Category : {}'.format(category))
+        logger.debug(f'Category : {category}')
         assert type(category)==str,                                         'get_info.get_category'
 
         logger.error('--- REFERENCE UNIT TESTING IS OK ---')

@@ -11,18 +11,21 @@ def go_to_next_page(next_page, next_page_number, max_page, printing=False):
         if printing: print(' - There is no next_page')
     else:
         if printing: print(' - There is a next_page')
-        if printing: print(' - Page url is : {}'.format(next_page))
+        if printing:
+            print(f' - Page url is : {next_page}')
         if max_page is None:
             if printing: print(' - There is no number of page restriction. Go on.')
             #yield response.follow(next_page, callback=self.parse_resto)
             return True
         else:
-            if printing: print(' - Max page number is : {}'.format(max_page))
+            if printing:
+                print(f' - Max page number is : {max_page}')
 
             if next_page_number is None:
                 if printing: print(' -  No next number page : STOP.')
             else:
-                if printing: print(' - Next page number is {}'.format(next_page_number))
+                if printing:
+                    print(f' - Next page number is {next_page_number}')
                 if int(next_page_number) <= int(max_page):
                     if printing: print(' - It is smaller than limit. Go on.')
                     #yield response.follow(next_page, callback=self.parse_resto)
@@ -93,8 +96,7 @@ def get_price(response):
 
 def get_similaire(response):
     selector = '//h2[contains(@class, "ds-title ds-title--medium")]//text()'
-    soustitre = response.xpath(selector).extract()
-    return soustitre
+    return response.xpath(selector).extract()
 
 
 def get_picture_url(response):

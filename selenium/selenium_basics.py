@@ -60,7 +60,7 @@ PROXY = "157.230.251.216:80"
 
 opts = Options()
 opts.add_argument(USER_AGENT)
-opts.add_argument('--proxy-server=%s' % PROXY)
+opts.add_argument(f'--proxy-server={PROXY}')
 
 path = '/Users/thibaud/Downloads/chromedriver'
 driver = webdriver.Chrome(path) #, options=opts)

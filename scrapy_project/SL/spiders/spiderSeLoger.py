@@ -3,10 +3,7 @@ import scrapy
 def isin_rep(rep, val='p'):
 
     p = [i for i in rep if val in i ]
-    if len(p) ==1:
-        p = p[0].split(' ')[0]
-    else:
-        p = None
+    p = p[0].split(' ')[0] if len(p) ==1 else None
     return p
                 
 
@@ -53,17 +50,17 @@ class QuotesSpiderSL(scrapy.Spider):
                 url = sl_item.css('a.c-pa-link::attr(href)').extract_first()
                 id_ = url.split('.htm')[0].split('/')[-1]
                 titre = sl_item.css('a.c-pa-link::attr(title)').extract_first()
-                
+
                 # Info bien
                 prix_raw = sl_item.css('span.c-pa-cprice::text').extract_first()
                 prix = str([tit for tit in prix_raw.split(' ') if len(tit)>2][0])
                 ville = sl_item.css('div.c-pa-city::text').extract_first()
-                
+
                 # Info intérieur
                 rep = sl_item.css('div.c-pa-criterion em::text').extract()
                 # print('>> REP')
                 # print(rep)
-                
+
 
 
                 nb_pieces = isin_rep(rep, 'p')
@@ -88,34 +85,30 @@ class QuotesSpiderSL(scrapy.Spider):
                 print(nb_pieces, 'pieces. Dont ', nb_chambres, 'chambres.')
                 print('Située à ',  code_postal, ville)
                 print('Vendu par', agence, site_agence, tel_agence)
-                # print('Description complémentaire :', url)
+                yield {
+                    'titre': titre,
+                    'id_': id_,
+                    'prix': prix,
+                    'surface': surface,
+                    'ville': ville,
+                    'code_postal': code_postal,
+                    'nb_pieces': nb_pieces,
+                    'nb_chambres': nb_chambres,
+                    'nb_pict': nb_pict,
+                    'etage': etage,
+                    'ascenceur': ascenceur,
+                    'terasse': terasse,
+                    'type': type_,
+                    'agence': agence,
+                    'tel_agence': tel_agence,
+                    'site_agence': site_agence,
+                    'url': url,
+                }
 
-                final_item = {
-                'titre':titre,
-                'id_':id_,
-                'prix': prix,
-                'surface': surface,
-                'ville':ville,
-                'code_postal':code_postal,
-                'nb_pieces':nb_pieces,
-                'nb_chambres':nb_chambres,
-                'nb_pict':nb_pict,
-                'etage':etage,
-                'ascenceur':ascenceur,
-                'terasse':terasse,
-                'type':type_,
-                'agence':agence,
-                'tel_agence':tel_agence,
-                'site_agence':site_agence,
-                'url':url
-            }
-
-                yield final_item  
             except:
                 print('>>>> BUG !!!')
 
         next_page = response.css('a.pagination-next::attr(href)').extract_first()
-        next_page_number = None
         # if next_page is not None:
         #     # next_page = response.follow(next_page)
         #     print('>>> GOING TO NEXT PAGE !')
@@ -125,16 +118,17 @@ class QuotesSpiderSL(scrapy.Spider):
             print(' - There is no next_page')
         else:
             print(' - There is a next_page')
-            print(' - Page url is : {}'.format(next_page))
+            print(f' - Page url is : {next_page}')
             if self.max_page is None:
                 print(' - There is no number of page restriction. Go on.')
                 yield response.follow(next_page, callback=self.parse)
             else:
-                print(' - Max page number is : {}'.format(self.max_page))
+                print(f' - Max page number is : {self.max_page}')
+                next_page_number = None
                 if next_page_number is None:
                     print(' -  No next number page : STOP.')
                 else:
-                    print(' - Next page number is {}'.format(next_page_number))
+                    print(f' - Next page number is {next_page_number}')
                     if int(next_page_number) <= int(self.max_page):
                         print(' - It is smaller than limit. Go on.')
                         yield response.follow(next_page, callback=self.parse)

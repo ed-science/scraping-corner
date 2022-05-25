@@ -11,7 +11,7 @@ def print_execution_time(start):
     now = time.time()
     duree = now - start
     duree_min = np.round(duree / 60, 2)
-    print('Durée : {} min.'.format(duree_min))
+    print(f'Durée : {duree_min} min.')
 
 
 # To parse which spider is called
@@ -33,9 +33,7 @@ def get_config(dispatcher_path, sigle):
     file_name = data[sigle]['file_name']
     spider_name = data[sigle]['spider_name']
     project_name = data[sigle]['project_name']
-    test_spiders = None
-    if 'test' in data[sigle].keys():
-        test_spiders = data[sigle]['test']
+    test_spiders = data[sigle]['test'] if 'test' in data[sigle].keys() else None
     return file_name, spider_name, project_name, test_spiders
 
 
@@ -61,14 +59,14 @@ if __name__ == "__main__":
     # Making tests before running spiders
     if test_spiders is not None:
         for test in test_spiders:
-            cmd = 'scrapy crawl {}'.format(test)
+            cmd = f'scrapy crawl {test}'
             os.system(cmd)
 
     # Start chronometer
     start_time = time.time()
 
     # Run spider
-    cmd = 'scrapy crawl {} -o ../data/corner_test/{}'.format(spider, file_)
+    cmd = f'scrapy crawl {spider} -o ../data/corner_test/{file_}'
     os.system(cmd)
 
     # Display execution time
