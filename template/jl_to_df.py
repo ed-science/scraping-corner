@@ -12,8 +12,7 @@ def read_jl_file(file_name):
             values.append(line)
     values = values[:-1]
     values = [json.loads(i) for i in values]
-    df = pd.DataFrame(values)
-    return df
+    return pd.DataFrame(values)
 
 
 if __name__ == "__main__":

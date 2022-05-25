@@ -38,11 +38,7 @@ class SpiderLBC(scrapy.Spider):
 
         # Parse max_page
         self.max_page = kwargs.get('max_page')
-        if self.max_page:
-            self.max_page = int(self.max_page)
-        else:
-            self.max_page = 1
-
+        self.max_page = int(self.max_page) if self.max_page else 1
         # Scrapping compteur
         self.page = 0
         self.object = 0
@@ -61,12 +57,12 @@ class SpiderLBC(scrapy.Spider):
         
         # Number of main page scrapped
         self.page += 1
-        logger.warn('Parse page ({}) - object ({})'.format(self.page, self.object))
+        logger.warn(f'Parse page ({self.page}) - object ({self.object})')
 
         # Get the url of each page
         lbc_items = get_info.get_items(response)
         links = [get_info.get_url_main(lbc_item) for lbc_item in lbc_items]
-        
+
         # Following links
         for link in links:
             yield response.follow(url=link, callback=self.parse_annonce)
@@ -81,14 +77,14 @@ class SpiderLBC(scrapy.Spider):
 
         # Displaying quantity information
         self.object += 1
-        logger.info('Parse object ({})'.format(self.object))
+        logger.info(f'Parse object ({self.object})')
 
         # Creating annonce item
         item = LBCAnnonceItem()
 
         # Identification of annonce
         id_ = get_info.get_id(response)
-        logger.debug('Parsing annonce : {}'.format(id_))
+        logger.debug(f'Parsing annonce : {id_}')
 
         # Basic information
         item['id_'] = id_
@@ -113,8 +109,8 @@ class SpiderLBC(scrapy.Spider):
         criteres = get_info.get_criteres(response)
         criteres_dict = get_info.critere_cleaning(criteres)
         item['critere'] = criteres_dict
-        logger.debug('Criteres : {}'.format(len(criteres_dict.keys())))
-        
+        logger.debug(f'Criteres : {len(criteres_dict.keys())}')
+
         nb_pict = 3  # self.results[id_]['nb_pict']
         categorie = 'cat'  # self.results[id_]['categorie']
         item['nb_pict'] = nb_pict
@@ -131,11 +127,11 @@ class SpiderLBC(scrapy.Spider):
 
         # Number of main page scrapped
         self.page += 1
-        logger.warn('Parse page ({})'.format(self.page))
+        logger.warn(f'Parse page ({self.page})')
 
         # Get the url of each page
         lbc_items = get_info.get_items(response)
-        logger.debug('> Found {} items.'.format(len(lbc_items)))
+        logger.debug(f'> Found {len(lbc_items)} items.')
 
         for lbc_item in lbc_items:
             
@@ -153,8 +149,8 @@ class SpiderLBC(scrapy.Spider):
             item['lieu']=get_info.get_lieu_main(lbc_item),
             item['date']= get_info.get_date_main(lbc_item),
             item['nb_pict']= get_info.get_nb_pict_main(lbc_item)
-            
-            logger.debug('> Parsing : {} on main page'.format(titre))
+
+            logger.debug(f'> Parsing : {titre} on main page')
             logger.debug('> Results found : ', list(item.keys()))
             yield item
 

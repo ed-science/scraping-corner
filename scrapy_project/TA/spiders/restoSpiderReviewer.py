@@ -48,9 +48,9 @@ class QuotesSpider(scrapy.Spider):
             } 
             print('>>>', comment_item['title'])
             yield comment_item 
-        
+
         xpath = '//a[@class="nav next taLnk ui_button primary"]'
-        next_page = response.xpath(xpath)[0].css('::attr(href)').extract_first() 
+        next_page = response.xpath(xpath)[0].css('::attr(href)').extract_first()
         next_page_number = response.xpath(xpath)[0].css('::attr(data-page-number)').extract_first()
 
 
@@ -61,17 +61,17 @@ class QuotesSpider(scrapy.Spider):
             print(' - There is no next_page')
         else:
             print(' - There is a next_page')
-            print(' - Page url is : {}'.format(next_page))
+            print(f' - Page url is : {next_page}')
             if self.max_page is None:
                 print(' - There is no number of page restriction. Go on.')
                 yield response.follow(next_page, callback=self.parse_resto)
             else:
-                print(' - Max page number is : {}'.format(self.max_page))
+                print(f' - Max page number is : {self.max_page}')
 
                 if next_page_number is None:
                     print(' -  No next number page : STOP.')
                 else:
-                    print(' - Next page number is {}'.format(next_page_number))
+                    print(f' - Next page number is {next_page_number}')
                     if int(next_page_number) <= int(self.max_page):
                         print(' - It is smaller than limit. Go on.')
                         yield response.follow(next_page, callback=self.parse_resto)
@@ -91,12 +91,19 @@ class QuotesSpider(scrapy.Spider):
                 interm =  resto.css('span.restaurants-list-ListCell__infoRowElement--2E6E3::text').extract()
                 descr_rapide = interm[1]
                 prix_eur = interm[2]
-                note_moyenne = resto.css('span.restaurants-list-ListCell__bubbleRating--1i1jl').extract_first().split('bubble_')[-1][0:2]
+                note_moyenne = (
+                    resto.css(
+                        'span.restaurants-list-ListCell__bubbleRating--1i1jl'
+                    )
+                    .extract_first()
+                    .split('bubble_')[-1][:2]
+                )
+
                 note_moyenne = int(note_moyenne)
-                
+
 
                 #
-                 
+
                 print('\n', '*'*100,'\n', name,'\n', '*'*100)
                 # print(url)
                 # print('avis', avis)
@@ -112,7 +119,7 @@ class QuotesSpider(scrapy.Spider):
                 'prix': prix_eur,
                 'descr':descr_rapide,
                 'url':url
-                } 
+                }
                 #yield final_item  
                 yield response.follow(url=url, callback=self.parse_resto)
             except:
@@ -121,7 +128,7 @@ class QuotesSpider(scrapy.Spider):
 
 
         xpath = '//a[@class="nav next rndBtn ui_button primary taLnk"]'
-        next_page = response.xpath(xpath)[0].css('::attr(href)').extract_first() 
+        next_page = response.xpath(xpath)[0].css('::attr(href)').extract_first()
         next_page_number = response.xpath(xpath)[0].css('::attr(data-page-number)').extract_first()
 
         next_page = response.xpath('//*[@id="EATERY_LIST_CONTENTS"]/div[2]/div/a').css('::attr(href)').extract()[-1]
@@ -131,17 +138,17 @@ class QuotesSpider(scrapy.Spider):
             print(' - There is no next_page')
         else:
             print(' - There is a next_page')
-            print(' - Page url is : {}'.format(next_page))
+            print(f' - Page url is : {next_page}')
             if self.max_page is None:
                 print(' - There is no number of page restriction. Go on.')
                 yield response.follow(next_page, callback=self.parse)
             else:
-                print(' - Max page number is : {}'.format(self.max_page))
+                print(f' - Max page number is : {self.max_page}')
 
                 if next_page_number is None:
                     print(' -  No next number page : STOP.')
                 else:
-                    print(' - Next page number is {}'.format(next_page_number))
+                    print(f' - Next page number is {next_page_number}')
                     if int(next_page_number) <= int(self.max_page):
                         print(' - It is smaller than limit. Go on.')
                         yield response.follow(next_page, callback=self.parse)

@@ -44,7 +44,7 @@ class AirbnbSpider(scrapy.Spider):
 
         # Number of main page scrapped
         self.page += 1
-        lg.warn('Parse page ({})'.format(self.page))
+        lg.warn(f'Parse page ({self.page})')
 
         # Loading all add on the webpage
         annonces = response.css('div._8ssblpx')
@@ -62,13 +62,13 @@ class AirbnbSpider(scrapy.Spider):
 
             rating = annonce.css('span._10fy1f8 ::text').extract_first()
             nb_comment = annonce.css('span._a7a5sx ::text').extract()
-            
+
             night_price = annonce.css('span._1p7iugi ::text').extract()
             full_price = annonce.css('span._7nl8mr ::text').extract()
 
             superhost = annonce.css('div._ufoy4t::text').extract()
             superhost = 'SUPERHOST' in superhost
-            
+
             lg.debug(titre)
             yield {
                 'titre':titre,
@@ -82,15 +82,15 @@ class AirbnbSpider(scrapy.Spider):
                 'full_price':full_price,
                 'superhost':superhost
                 }
-     
+
         next_page = response.css('a._za9j7e ::attr(href)').extract()
         lg.warn(len(next_page))
-        
-        if next_page is not None:
-            if len(next_page)>0:
-                next_page = next_page[0]
-                url = "https://www.airbnb.com" + next_page + '&display_currency=USD'
-                yield scrapy.Request(url=url, callback=self.parse)
-        else:
+
+        if next_page is None:
             lg.error('No next page')
+
+        elif len(next_page)>0:
+            next_page = next_page[0]
+            url = f"https://www.airbnb.com{next_page}&display_currency=USD"
+            yield scrapy.Request(url=url, callback=self.parse)
         

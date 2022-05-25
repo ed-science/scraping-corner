@@ -71,23 +71,23 @@ class TAReviewSpiderTest(scrapy.Spider):
         """MAIN PARSING : Start from a classical reastaurant page
             - Usually there are 30 restaurants per page
         """
-        logger.error('--- STARTING MAIN ({}) UNIT TESTING ---'.format(test))
-        
+        logger.error(f'--- STARTING MAIN ({test}) UNIT TESTING ---')
+
         # Get the list of these 30 restaurants
         my_urls = get_info.get_urls_resto_in_main_search_page(response)
-        urls_start = [True if url.startswith('/Restaurant_Review-') else False for url in my_urls]
+        urls_start = [bool(url.startswith('/Restaurant_Review-')) for url in my_urls]
         assert len(my_urls)==37
         assert sum(urls_start)==37
-        
+
         next_page, next_page_number = get_info.get_urls_next_list_of_restos(response)
         logger.debug(next_page)
-        logger.debug(next_page_number)    
-        if test==1:
+        logger.debug(next_page_number)
+        if test == 1:
             assert int(next_page_number)==2
-        if test==2:
+        elif test == 2:
             assert int(next_page_number)==3
-        
-        logger.error('--- MAIN ({}) UNIT TESTING IS FINISHED ---'.format(test))
+
+        logger.error(f'--- MAIN ({test}) UNIT TESTING IS FINISHED ---')
         time.sleep(3)
 
         
@@ -96,18 +96,18 @@ class TAReviewSpiderTest(scrapy.Spider):
             - Usually there are 10 comments per page
         """
         logger.error('--- STARTING RESTAURANT UNIT TESTING ---')
-        
+
         # Get the list of these 10 comments
         reviews = get_info.get_reviews_list_in_restaurant_page(response)
         urls_review = get_info.get_urls_reviews_in_restaurant_page(reviews)
-        urls_start = [True if url.startswith('/ShowUserReviews-') else False for url in urls_review]
+        urls_start = [bool(url.startswith('/ShowUserReviews-')) for url in urls_review]
         logger.debug(len(reviews))
         logger.debug(urls_review[0])
         assert len(reviews)==10
         assert len(urls_review)==10
         assert sum(urls_start)==10
-        
-        
+
+
         next_page, next_page_number = get_info.get_urls_next_list_of_reviews(response)
         logger.debug(next_page)
         logger.debug(next_page_number)

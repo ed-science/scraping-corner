@@ -47,7 +47,7 @@ class TrustPilotSpider(scrapy.Spider):
 
         # Number of main page scrapped
         self.page += 1
-        logger.warn('Parse page ({})'.format(self.page))
+        logger.warn(f'Parse page ({self.page})')
 
         # Get the url of each reference on the current page
         links = get_info.get_article_urls(response)
@@ -55,7 +55,7 @@ class TrustPilotSpider(scrapy.Spider):
         # Follow these urls
         for link in links:
             yield response.follow(url=link, callback=self.parse_articles)
-          
+
         # Get pagination information
         next_page = get_info.get_next_page_of_articles(response)
         next_page_number = get_info.get_next_page_number(next_page)
@@ -71,7 +71,7 @@ class TrustPilotSpider(scrapy.Spider):
         
         # Number of reviews scrapped
         self.object += 1
-        logger.info('Parse object ({})'.format(self.object))
+        logger.info(f'Parse object ({self.object})')
         logger.debug(response.url)
 
         # Get institute name
@@ -80,9 +80,9 @@ class TrustPilotSpider(scrapy.Spider):
 
         # Go through all reviews of the list
         reviews = get_info.get_reviews(response)
-        
+
         for review in reviews:
-            
+
             # Instantiate item
             item = TrustpilotItem()
 
@@ -96,7 +96,7 @@ class TrustPilotSpider(scrapy.Spider):
             item['nb_answers'] = get_info.is_answers_to_review(review)
             item['content'] = get_info.get_review_content(review)
             item['url'] = get_info.get_review_url(review)
-            
+
             logger.debug(item['title'])
             # Store value as decided in the pipeline
             yield item

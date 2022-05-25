@@ -42,7 +42,7 @@ class BasicAirbnbSpider(scrapy.Spider):
             # Is it a airbnb "superhost" ?
             superhost        = hotel.css('div._ufoy4t::text').extract()
             superhost        = 'SUPERHOST' in superhost
-            
+
             lg.debug(title)
             yield {
                 'titre'            : title,
@@ -55,14 +55,13 @@ class BasicAirbnbSpider(scrapy.Spider):
                 'nb_comment'       : nb_comment,
                 'superhost'        : superhost
                 }
-        
+
         # Get Next Page information
         next_page = response.css('a._za9j7e ::attr(href)').extract()
         lg.info(next_page)
-        if next_page is not None:
-            if len(next_page)>0:
-                next_page = next_page[0]
-                url = "https://www.airbnb.com" + next_page + '&display_currency=USD'
-                lg.info(url)
-                yield scrapy.Request(url=url, callback=self.parse)     
+        if next_page is not None and len(next_page) > 0:
+            next_page = next_page[0]
+            url = f"https://www.airbnb.com{next_page}&display_currency=USD"
+            lg.info(url)
+            yield scrapy.Request(url=url, callback=self.parse)     
        

@@ -40,7 +40,7 @@ class Cocktail(scrapy.Spider):
         """MAIN PARSING : Start from a classical restaurant page
             - Usually there are 30 restaurants per page
         """
-        logger.warn('> PARSING NEW MAIN PAGE OF COCKTAILS ({})'.format(self.main_nb))
+        logger.warn(f'> PARSING NEW MAIN PAGE OF COCKTAILS ({self.main_nb})')
 
         self.main_nb += 1
 
@@ -49,7 +49,7 @@ class Cocktail(scrapy.Spider):
         for urls in my_urls:
             yield response.follow(url=urls, callback=self.parse_cocktail)
             # logger.info(my_urls)
-        
+
 
         next_page, next_page_number = get_info.get_urls_next_list_of_cocktails(response)
 
@@ -61,7 +61,7 @@ class Cocktail(scrapy.Spider):
             - Read these data and store them
         """
         self.cocktail_nb += 1
-        logger.info('> COCKTAIL  ({}) = {}'.format(self.cocktail_nb, response.url))
+        logger.info(f'> COCKTAIL  ({self.cocktail_nb}) = {response.url}')
 
         # Intitiate storing object
         cocktail_item = CocktailItem()

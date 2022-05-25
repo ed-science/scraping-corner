@@ -61,7 +61,7 @@ class QuotesSpider(scrapy.Spider):
         """MAIN PARSING : Start from a classical reastaurant page
             - Usually there are 30 restaurants per page
         """
-        logger.warn(' > PARSING NEW MAIN PAGE OF RESTO ({})'.format(self.main_nb))
+        logger.warn(f' > PARSING NEW MAIN PAGE OF RESTO ({self.main_nb})')
 
         self.main_nb += 1
 
@@ -70,7 +70,7 @@ class QuotesSpider(scrapy.Spider):
 
         # For each url : dive into the restaurant to get the reveiws
         for url in my_urls:
-            logger.warn('> New restaurant detected : {}'.format(url))
+            logger.warn(f'> New restaurant detected : {url}')
             yield response.follow(url=url, callback=self.parse_resto)
 
         # self.max_page = 2
@@ -85,7 +85,7 @@ class QuotesSpider(scrapy.Spider):
         """
 
         # Display a message into the console
-        logger.warn(' > PARSING NEW RESTO PAGE ({})'.format(self.resto_nb))
+        logger.warn(f' > PARSING NEW RESTO PAGE ({self.resto_nb})')
         self.resto_nb += 1
 
         # Get the list of these 10 comments

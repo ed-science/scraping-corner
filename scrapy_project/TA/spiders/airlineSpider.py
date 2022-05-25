@@ -12,13 +12,7 @@ class TripAdvisor(Spider):
 
     def verify(self, page_list):
         if isinstance(page_list, list):
-            if len(page_list) == 1:
-                return page_list[0]
-                # In Python 2, everything you scraped is in unicode, which might cause some trouble when you save it to local file.
-                # The rule of thumb is to encode it with ascii using the following command.
-                # return content.encode('ascii','ignore')
-            else:
-                return page_list[1]
+            return page_list[0] if len(page_list) == 1 else page_list[1]
 
     def parse(self, response):
         print('Start Airline Scrapping')
@@ -30,10 +24,10 @@ class TripAdvisor(Spider):
             content=review.xpath('.//p[@class="partial_entry"]/text()').extract_first()
             date_=review.xpath('.//div[@class="rating reviewItemInline"]/span/text()').extract()
             if len(date_)==1:
-                if re.search('(ago)$', date_[0]) != None:
-                    date=review.xpath('.//div[@class="rating reviewItemInline"]/span/@title').extract_first()
-                else:
+                if re.search('(ago)$', date_[0]) is None:
                     date=date_[0]
+                else:
+                    date=review.xpath('.//div[@class="rating reviewItemInline"]/span/@title').extract_first()
             else:
                 date=review.xpath('.//div[@class="rating reviewItemInline"]/span/@title').extract_first()
 
@@ -45,11 +39,10 @@ class TripAdvisor(Spider):
                     route=category.xpath('.//span/text()').extract()[0]
                     cabin=category.xpath('.//span/text()').extract()[1]
                     destination=category.xpath('.//span/text()').extract()[2]
-                else:
-                    if len(category.xpath('.//span/text()').extract())==2:
-                        route=category.xpath('.//span/text()').extract()[0]
-                        cabin='NA'
-                        destination=category.xpath('.//span/text()').extract()[1]
+                elif len(category.xpath('.//span/text()').extract())==2:
+                    route=category.xpath('.//span/text()').extract()[0]
+                    cabin='NA'
+                    destination=category.xpath('.//span/text()').extract()[1]
 
                 item=TripAdvisorAirlineItem()
                 item['title']=title

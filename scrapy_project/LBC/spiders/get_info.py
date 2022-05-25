@@ -11,18 +11,21 @@ def go_to_next_page(next_page, next_page_number, max_page, printing=False):
         if printing: print(' - There is no next_page')
     else:
         if printing: print(' - There is a next_page')
-        if printing: print(' - Page url is : {}'.format(next_page))
+        if printing:
+            print(f' - Page url is : {next_page}')
         if max_page is None:
             if printing: print(' - There is no number of page restriction. Go on.')
             #yield response.follow(next_page, callback=self.parse_resto)
             return True
         else:
-            if printing: print(' - Max page number is : {}'.format(max_page))
+            if printing:
+                print(f' - Max page number is : {max_page}')
 
             if next_page_number is None:
                 if printing: print(' -  No next number page : STOP.')
             else:
-                if printing: print(' - Next page number is {}'.format(next_page_number))
+                if printing:
+                    print(f' - Next page number is {next_page_number}')
                 if int(next_page_number) <= int(max_page):
                     if printing: print(' - It is smaller than limit. Go on.')
                     #yield response.follow(next_page, callback=self.parse_resto)
@@ -33,10 +36,10 @@ def go_to_next_page(next_page, next_page_number, max_page, printing=False):
 
 
 def is_url_already_in_db(url_id, id_list):
-    logger.debug('> Checking if ID : {} already in db'.format(url_id))
+    logger.debug(f'> Checking if ID : {url_id} already in db')
     # print(id_list)
     id_list = [str(i) for i in id_list]
-    logger.debug('  {}'.format(str(url_id) in id_list))
+    logger.debug(f'  {str(url_id) in id_list}')
     return str(url_id) in id_list
 
 
@@ -47,8 +50,7 @@ def critere_cleaning(criteres):
         critere_name = extraction_crit[0]
         critere_value = extraction_crit[1]
         # print('CRITERE : ', critere_name)
-        if (critere_name == 'GES') or (
-                critere_name == 'Classe énergie'):  # ('Classe' in critere_name and 'nergie' in critere_name) :
+        if critere_name in ['GES', 'Classe énergie']:  # ('Classe' in critere_name and 'nergie' in critere_name) :
             # print('Specific criter')
             critere_value = 'NA'
         dict_crit[critere_name] = critere_value
@@ -56,12 +58,8 @@ def critere_cleaning(criteres):
 
 
 def check_buttons(buttons):
-    is_numero = False
-    if 'Voir le numéro' in buttons:
-        is_numero = True
-    is_envoi_msg = False
-    if 'Envoyer un message' in buttons:
-        is_envoi_msg = True
+    is_numero = 'Voir le numéro' in buttons
+    is_envoi_msg = 'Envoyer un message' in buttons
     return is_numero, is_envoi_msg
 
 ################################################################################################

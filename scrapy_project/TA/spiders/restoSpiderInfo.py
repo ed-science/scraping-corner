@@ -62,7 +62,7 @@ class restoTAinfo(scrapy.Spider):
         """MAIN PARSING : Start from a classical restaurant page
             - Usually there are 30 restaurants per page
         """
-        logger.warn('> PARSING NEW MAIN PAGE OF RESTO ({})'.format(self.main_nb))
+        logger.warn(f'> PARSING NEW MAIN PAGE OF RESTO ({self.main_nb})')
 
         self.main_nb += 1
 
@@ -89,7 +89,7 @@ class restoTAinfo(scrapy.Spider):
         url = get_info.get_resto_url(response)
         name_url = get_info.get_resto_name_in_url_from_resto(url)
         resto_item['id'] = get_info.get_id_resto(url)
-        logger.info('- Resto ({}): {}'.format(self.resto_nb, name_url))
+        logger.info(f'- Resto ({self.resto_nb}): {name_url}')
 
         # General
         general = get_info.get_review_information_from_resto(response)

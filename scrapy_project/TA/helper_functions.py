@@ -9,8 +9,7 @@ def user_info_splitter(raw_user_info):
 
     splited_info = raw_user_info.split()
     for element in splited_info:
-        converted_element = get_convertible_elements_as_dic(element)
-        if converted_element:
+        if converted_element := get_convertible_elements_as_dic(element):
             user_info[converted_element[0]] = converted_element[1]
 
     return user_info

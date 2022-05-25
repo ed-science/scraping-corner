@@ -9,7 +9,7 @@ def print_execution_time(start):
     now = time.time()
     duree = now - start
     duree_min = np.round(duree / 60, 2)
-    print('Durée : {} min.'.format(duree_min))
+    print(f'Durée : {duree_min} min.')
 
 
 if __name__ == "__main__":
@@ -18,7 +18,7 @@ if __name__ == "__main__":
     ##################################################
     file_name = 'oms_1.jl'
     ##################################################
-    
+
     # Start script
     print('Start scrapping. (Be sure that Scrapy is locally installed in your environment)')
 
@@ -31,9 +31,9 @@ if __name__ == "__main__":
 
     # Indicate spider name
     spider_name = 'OMS'
-    
+
     # Run spider
-    cmd = 'scrapy crawl {} -o ../data/{}'.format(spider_name, file_name)
+    cmd = f'scrapy crawl {spider_name} -o ../data/{file_name}'
     os.system(cmd)
 
     # Display execution time

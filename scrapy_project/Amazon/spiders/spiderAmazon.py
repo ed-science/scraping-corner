@@ -48,7 +48,7 @@ class SpiderAmazon(scrapy.Spider):
 
         # Number of main page scrapped
         self.page += 1
-        logger.warn('Parse page ({})'.format(self.page))
+        logger.warn(f'Parse page ({self.page})')
 
         # Get the url of each reference on the current page
         links = get_info.get_reference_links(response)
@@ -65,7 +65,7 @@ class SpiderAmazon(scrapy.Spider):
 
         # Decision to follow a page or not
         if page_number <= 120:
-            
+
             yield response.follow(next_page, callback=self.parse)
             # next_page = 'https://www.amazon.com' + next_page
             # yield SplashRequest(url=next_page, callback=self.parse, args={'wait':10})
@@ -74,7 +74,7 @@ class SpiderAmazon(scrapy.Spider):
 
     def parse_reference(self, response):
         self.object += 1
-        logger.info('Parse object ({})'.format(self.object))
+        logger.info(f'Parse object ({self.object})')
         logger.debug(response.url)
 
         # Get price informations
